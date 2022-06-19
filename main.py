@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from datetime import datetime
+from pm25 import get_pm25
 
 app = Flask(__name__)
 
@@ -12,8 +13,18 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
+@app.route('/pm25')
+def pm25():
+    today = get_today()
+    columns, values = get_pm25()
+
+    return render_template('./pm25.html',**locals())
+
+
 @app.route('/stock')
 def stock():
+    today = get_today()
+
     stocks = [
         {'分類': '日經指數', '指數': '22,920.30'},
         {'分類': '韓國綜合', '指數': '2,304.59'},
@@ -24,7 +35,7 @@ def stock():
     for stock in stocks:
         print(stock['分類'], stock['指數'])
 
-    return render_template('./stock.html', stocks=stocks)
+    return render_template('./stock.html', **locals())
 
 
 @app.route('/sum/x=<x>&y=<y>')
