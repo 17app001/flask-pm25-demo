@@ -7,11 +7,14 @@ def get_pm25():
     try:
         print('資料讀取中.')
         columns = ['city', 'stationName', 'result', 'resultTime']
+        columns = ['縣市', '站點名稱', '數值', '更新時間']
         datas = pd.read_json(url)['value']
         values = []
         for data in datas:
             city, stationName = data['Thing']['properties']['city'], data['Thing']['properties']['stationName']
             result, resultTime = data['Observations'][0]['result'], data['Observations'][0]['resultTime']
+            resultTime = pd.to_datetime(
+                resultTime).strftime('%Y-%m-%d %H:%M:%S')
 
             #print(city, stationName, result, resultTime)
             values.append([city, stationName, result, resultTime])

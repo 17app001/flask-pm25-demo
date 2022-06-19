@@ -6,13 +6,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PM2.5全台資訊</title>
+    <!-- <link rel="stylesheet" href="../static/pm25.css"> -->
+    <link rel="stylesheet" href="{{url_for('static',filename='./pm25.css')}}">
 </head>
 
 <body>
-    <h1>PM2.5全台資訊</h1>
-    {{today}}
-    {{columns}}
-    {{values}}
+    <div id="container">
+        <h1>PM2.5全台資訊</h1>
+        <p class="date">目前時間:{{today}}</p>
+        {%if values%}
+        <table border="1">
+            <thead>
+                <tr>
+                    {%for column in columns%}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+                {%for value in values%}
+                <tr>
+                    {%for data in value%}
+                    <td>{{data}}</td>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        {%else%}
+        <h2>讀取資料失敗...</h2>
+        {%endif%}
+    </div>
 </body>
 
 </html>
