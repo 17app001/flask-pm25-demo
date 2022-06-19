@@ -13,12 +13,13 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
+@app.route('/pm25/<sort>')
 @app.route('/pm25')
-def pm25():
+def pm25(sort=None):
     today = get_today()
-    columns, values = get_pm25()
+    columns, values = get_pm25(sort)
 
-    return render_template('./pm25.html',**locals())
+    return render_template('./pm25.html', **locals())
 
 
 @app.route('/stock')

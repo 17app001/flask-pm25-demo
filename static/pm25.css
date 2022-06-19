@@ -29,3 +29,9 @@ th {
 td {
     background-color: aquamarine;
 }
+
+@media screen and(max-width:768px) {
+    #container {
+        width: 100%;
+    }
+}
