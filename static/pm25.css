@@ -30,8 +30,21 @@ td {
     background-color: aquamarine;
 }
 
-@media screen and(max-width:768px) {
+@media screen and (max-width:768px) {
     #container {
         width: 100%;
     }
+
+    table {
+        width: 90%;
+    }
+}
+
+input[type="submit"] {
+    margin-bottom: 6px;
+    background-color: chartreuse;
+    border: 0px;
+    border-radius: 6px;
+    width: 60px;
+    height: 30px;
 }
