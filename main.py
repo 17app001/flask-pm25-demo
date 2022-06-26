@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from datetime import datetime
 from scrape.pm25 import get_pm25
+import json
 
 app = Flask(__name__)
 
@@ -11,6 +12,23 @@ def index(name='GUEST'):
     today = get_today()
 
     return render_template('./index.html', today=today, name=name)
+
+
+@app.route('/pm25-json', methods=['GET', 'POST'])
+def pm25_json():
+    columns, values = get_pm25(False)
+
+    stationName = [value[1] for value in values]
+    result = [value[2] for value in values]
+
+    data = {'stationName': stationName, 'result': result}
+
+    return json.dumps(data, ensure_ascii=False)
+
+
+@app.route('/pm25-chart')
+def pm25_chart():
+    return render_template('./pm25-chart.html')
 
 
 @app.route('/pm25', methods=['GET', 'POST'])
@@ -67,4 +85,5 @@ def get_today():
 
 
 if __name__ == '__main__':
+    pm25_json()
     app.run(debug=True)

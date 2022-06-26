@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PM2.5全台資訊</title>
     <!-- <link rel="stylesheet" href="../static/pm25.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="{{url_for('static',filename='./css/pm25.css')}}">
 </head>
 
@@ -15,10 +16,15 @@
         <h1>PM2.5全台資訊網</h1>
         <p class="date">目前時間:{{today}}</p>
         <form action="/pm25" method="POST">
-            <input type="submit" name="sort" value="排序"></input>
+            <input type="submit" name="sort" id="sort" value="排序"></input>
             <input type="submit" name="update" value="更新"></input>
         </form>
         {%if values%}
+        <div style="text-align:left">
+            <a href="/">首頁</a>
+            <a href="/pm25-chart">圖表</a>
+        </div>
+
         <table border="1">
             <thead>
                 <tr>
@@ -41,6 +47,22 @@
         <h2>讀取資料失敗...</h2>
         {%endif%}
     </div>
+    <script>
+        // const h1El = document.querySelector("h1");
+        // h1El.innerText = "Hello Flask";
+
+        // const sortEl = document.querySelector("#sort");
+        // sortEl.addEventListener("click", () => {
+        //     alert("sorting.....1");
+        // });
+
+        // $("h1").text("Hello JQuery");
+        // $("h1").html("<u>Hello JQuery</u>")
+        // $(".date").css("color", "red");
+        // $("#sort").click(() => {
+        //     alert("sorting.....2");
+        // });
+    </script>
 </body>
 
 </html>
