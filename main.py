@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from datetime import datetime
 from scrape.pm25 import get_pm25
 import json
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -85,5 +86,5 @@ def get_today():
 
 
 if __name__ == '__main__':
-    pm25_json()
+    # pm25_json()
     app.run(debug=True)
