@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from datetime import datetime
-from pm25 import get_pm25
+from scrape.pm25 import get_pm25
 
 app = Flask(__name__)
 
@@ -13,7 +13,6 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
-
 @app.route('/pm25', methods=['GET', 'POST'])
 def pm25():
     sort = False
@@ -21,8 +20,6 @@ def pm25():
     if(request.method == 'POST'):
         if request.form.get('sort'):
             sort = True
-        # if request.form.get('update'):
-        #     sort=False
 
     today = get_today()
     columns, values = get_pm25(sort)
