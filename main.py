@@ -22,7 +22,7 @@ def pm25_json():
     stationName = [value[1] for value in values]
     result = [value[2] for value in values]
 
-    data = {'stationName': stationName, 'result': result}
+    data = {'date': get_today(), 'stationName': stationName, 'result': result}
 
     return json.dumps(data, ensure_ascii=False)
 
