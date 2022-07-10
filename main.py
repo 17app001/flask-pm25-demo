@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from datetime import datetime
-from scrape.pm25 import get_pm25, get_six_pm25
+from scrape.pm25 import get_pm25, get_six_pm25, get_all_city, get_city_pm25
 import json
 from bs4 import BeautifulSoup
 
@@ -13,6 +13,13 @@ def index(name='GUEST'):
     today = get_today()
 
     return render_template('./index.html', today=today, name=name)
+
+
+@app.route('/city-pm25/<city>', methods=['GET'])
+def pm25_city_json(city):
+    stationName, result = get_city_pm25(city)
+
+    return json.dumps({'stationName': stationName, 'result': result}, ensure_ascii=False)
 
 
 @app.route('/six-pm25-json', methods=['POST'])
@@ -36,7 +43,8 @@ def pm25_json():
 
 @app.route('/pm25-chart')
 def pm25_chart():
-    return render_template('./pm25-chart-bulma.html')
+    citys = get_all_city()
+    return render_template('./pm25-chart-bulma.html', countys=citys)
 
 
 @app.route('/pm25', methods=['GET', 'POST'])

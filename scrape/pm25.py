@@ -8,6 +8,31 @@ ssl._create_default_https_context = ssl._create_unverified_context
 df = None
 
 
+def get_city_pm25(city):
+    global df
+    stationName, result = [], []
+    try:
+        datas = df.groupby('city').get_group(
+            city)[['stationName', 'result']].values.tolist()
+
+        stationName, result = list(zip(*datas))
+    except Exception as e:
+        print(e)
+
+    return stationName, result
+
+
+def get_all_city():
+    global df
+    citys = []
+    try:
+        citys = sorted(list(set(df['city'])))
+    except Exception as e:
+        print(e)
+
+    return citys
+
+
 def get_six_pm25():
     global df
     six_citys = ['臺北市', '新北市', '桃園市', '臺中市', '臺南市', '高雄市']
@@ -56,6 +81,10 @@ def get_pm25(sort=False):
     return columns, values
 
 
+get_pm25()
+
 if __name__ == '__main__':
     print(get_pm25(True))
     print(get_six_pm25())
+    print(get_all_city())
+    print(get_city_pm25('高雄市'))
