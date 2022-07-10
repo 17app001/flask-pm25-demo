@@ -1,5 +1,6 @@
 const mainEl = document.querySelector("#main");
 const sixEl = document.querySelector("#six");
+const countyEl = document.querySelector("#county");
 
 const pm25HighSite = document.querySelector("#pm25_high_site");
 const pm25HighValue = document.querySelector("#pm25_high_value");
@@ -8,9 +9,23 @@ const pm25LowValue = document.querySelector("#pm25_low_value");
 
 let chart1 = echarts.init(mainEl);
 let chart2 = echarts.init(sixEl);
+let chart3 = echarts.init(countyEl);
 
 $(document).ready(() => {
   drawPM25();
+});
+
+window.onresize = function () {
+  chart1.resize();
+  chart2.resize();
+  chart3.resize();
+};
+
+document.querySelector("#county_btn").addEventListener("click", () => {
+  let city = document.querySelector("#select_county").value;
+
+  console.log(city);
+  drawCityPM25(city);
 });
 
 function renderMaxPM25(data) {
@@ -26,6 +41,23 @@ function renderMaxPM25(data) {
   pm25LowValue.innerText = result[minIndex];
 
   console.log(maxIndex, minIndex);
+}
+
+function drawCityPM25(city) {
+  chart3.showLoading();
+  $.ajax({
+    url: `/city-pm25/${city}`,
+    type: "POST",
+    dataType: "json",
+    success: (data) => {
+      chart3.hideLoading();
+      drawChart3(data);
+    },
+    error: () => {
+      chart3.hideLoading();
+      alert(`讀取${city}數據錯誤!`);
+    },
+  });
 }
 
 function drawSixPM25() {
@@ -66,12 +98,37 @@ function drawPM25() {
       drawChart1(data);
       renderMaxPM25(data);
       drawSixPM25();
+      drawCityPM25("南投縣");
     },
     error: () => {
       chart1.hideLoading();
       alert("讀取數據錯誤!");
     },
   });
+}
+
+function drawChart3(data) {
+  let option = {
+    legend: {
+      data: ["PM2.5"],
+    },
+    xAxis: {
+      data: data["stationName"],
+    },
+    yAxis: {},
+    series: [
+      {
+        itemStyle: {
+          color: "#db7093",
+        },
+        name: "PM2.5",
+        type: "bar",
+        data: data["result"],
+      },
+    ],
+  };
+
+  chart3.setOption(option);
 }
 
 function drawChart2(data) {
