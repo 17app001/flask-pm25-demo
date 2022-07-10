@@ -9,6 +9,7 @@ df = None
 
 
 def get_six_pm25():
+    global df
     six_citys = ['臺北市', '新北市', '桃園市', '臺中市', '臺南市', '高雄市']
     result = []
     try:
@@ -17,6 +18,7 @@ def get_six_pm25():
                 city)['result'].mean(), 2)
             print(city, mean)
             result.append(mean)
+
     except Exception as e:
         print(e)
 

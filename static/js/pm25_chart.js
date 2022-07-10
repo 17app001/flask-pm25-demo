@@ -1,10 +1,13 @@
 const mainEl = document.querySelector("#main");
+const sixEl = document.querySelector("#six");
+
 const pm25HighSite = document.querySelector("#pm25_high_site");
 const pm25HighValue = document.querySelector("#pm25_high_value");
 const pm25LowSite = document.querySelector("#pm25_low_site");
 const pm25LowValue = document.querySelector("#pm25_low_value");
 
 let chart1 = echarts.init(mainEl);
+let chart2 = echarts.init(sixEl);
 
 $(document).ready(() => {
   drawPM25();
@@ -23,6 +26,24 @@ function renderMaxPM25(data) {
   pm25LowValue.innerText = result[minIndex];
 
   console.log(maxIndex, minIndex);
+}
+
+function drawSixPM25() {
+  chart2.showLoading();
+  $.ajax({
+    url: "/six-pm25-json",
+    type: "POST",
+    dataType: "json",
+    success: (data) => {
+      chart2.hideLoading();
+      console.log(data);
+      drawChart2(data);
+    },
+    error: () => {
+      chart2.hideLoading();
+      alert("讀取六都數據錯誤!");
+    },
+  });
 }
 
 function drawPM25() {
@@ -44,12 +65,37 @@ function drawPM25() {
 
       drawChart1(data);
       renderMaxPM25(data);
+      drawSixPM25();
     },
     error: () => {
       chart1.hideLoading();
       alert("讀取數據錯誤!");
     },
   });
+}
+
+function drawChart2(data) {
+  let option = {
+    legend: {
+      data: ["PM2.5"],
+    },
+    xAxis: {
+      data: data["citys"],
+    },
+    yAxis: {},
+    series: [
+      {
+        itemStyle: {
+          color: "#800080",
+        },
+        name: "PM2.5",
+        type: "bar",
+        data: data["result"],
+      },
+    ],
+  };
+
+  chart2.setOption(option);
 }
 
 function drawChart1(data) {
